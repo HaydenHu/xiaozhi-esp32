@@ -50,6 +50,9 @@ public:
 
     // Add theme switching function
     virtual void SetTheme(Theme* theme) override;
+
+    // Add set music info function
+    virtual void SetMusicInfo(const char* song_name) override;
 };
 
 // SPI LCD显示器

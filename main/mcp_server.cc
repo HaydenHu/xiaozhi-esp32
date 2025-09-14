@@ -17,7 +17,7 @@
 #include "settings.h"
 #include "lvgl_theme.h"
 #include "lvgl_display.h"
-
+#include "boards/common/esp32_music.h"
 #define TAG "MCP"
 
 McpServer::McpServer() {
@@ -118,6 +118,29 @@ void McpServer::AddCommonTools() {
                 auto question = properties["question"].value<std::string>();
                 return camera->Explain(question);
             });
+    }
+    auto music = board.GetMusic();
+    if (music)
+    {
+        AddTool("self.music.play_song",
+                "Play the specified song. When users request to play music, this tool will automatically retrieve song details and start streaming.\n"
+                "parameter:\n"
+                "  `song_name`: The name of the song to be played.\n"
+                "return:\n"
+                "  Play status information without confirmation, immediately play the song.",
+                PropertyList({Property("song_name", kPropertyTypeString)}),
+                [music](const PropertyList &properties) -> ReturnValue
+                {
+                    auto song_name = properties["song_name"].value<std::string>();
+                    if (!music->Download(song_name))
+                    {
+                        return "{\"success\": false, \"message\": \"Failed to obtain music resources\"}";
+                    }
+                    auto download_result = music->GetDownloadResult();
+                    ESP_LOGD(TAG, "Music details result: %s", download_result.c_str());
+                    return true;
+                });
+
     }
 #endif
 

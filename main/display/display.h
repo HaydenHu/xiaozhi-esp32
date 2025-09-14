@@ -39,6 +39,11 @@ public:
     virtual Theme* GetTheme() { return current_theme_; }
     virtual void UpdateStatusBar(bool update_all = false);
     virtual void SetPowerSaveMode(bool on);
+    virtual void SetMusicInfo(const char* song_name);
+
+    virtual void start() {}
+    virtual void clearScreen() {}  // 清除FFT显示，默认为空实现
+    virtual void stopFft() {}      // 停止FFT显示，默认为空实现
 
     inline int width() const { return width_; }
     inline int height() const { return height_; }
@@ -52,6 +57,8 @@ protected:
     friend class DisplayLockGuard;
     virtual bool Lock(int timeout_ms = 0) = 0;
     virtual void Unlock() = 0;
+    lv_obj_t* chat_message_label_ = nullptr;
+    lv_obj_t *emotion_label_ = nullptr;
 };
 
 
