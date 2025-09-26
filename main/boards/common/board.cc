@@ -190,12 +190,3 @@ std::string Board::GetSystemInfoJson() {
     json += R"(})";
     return json;
 }
-
-Assets* Board::GetAssets() {
-#ifdef DEFAULT_ASSETS
-    static Assets assets(DEFAULT_ASSETS);
-    return &assets;
-#else
-    return nullptr;
-#endif
-}
